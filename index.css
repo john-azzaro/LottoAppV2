@@ -1,0 +1,428 @@
+* {
+    box-sizing: border-box;
+    margin: 0;  
+    padding: 0;  
+    font-family: 'Rubik', sans-serif;
+    list-style-type: none;
+}
+
+.hidden {
+    display: none;
+}
+
+body {
+    background-color: rgb(245, 245, 245);
+}
+
+/* ////////// BALL STYLING ////////// */
+
+.numberslist li {
+    display: inline-block;
+    color: rgb(90, 80, 80);
+    background-color: rgb(252, 250, 249);
+    border-radius: 50%;  
+    height: 1.5em;
+    width: 1.6em;
+    padding: 3px;
+    margin-left: 3px;
+    margin-right: 1px;
+}
+
+/* powerball multiplier*/
+.numberslist li:last-child {
+    color: rgb(255, 255, 255);
+    background-color: rgb(204, 139, 141);
+}
+
+/* megamillions megaball*/
+.megamillionsnumbers li:nth-last-child(2) {
+    color: rgb(255, 255, 255); 
+    background-color: rgb(172, 134, 53);
+}
+
+/* megamillions megaplier*/
+.megamillionsnumbers li:nth-last-child(1) {
+    color: rgb(255, 255, 255);
+    background-color: rgb(201, 170, 120);
+
+}
+
+/* powerball power ball*/
+.powerballnumbers li:nth-last-child(2) {
+    color: rgb(255, 255, 255);
+    background-color: rgb(170, 79, 79);   
+}
+
+
+/* ///////// History button styling ////////// */
+
+
+.historyexitstyle {
+   cursor: pointer;
+}
+
+.historyexitstyle:hover {
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.historyhover:hover {
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+/* ////////// Landing Page buttons  ////////// */
+
+.landingexitstyle {
+    font-size: 28px;
+    display: inline-block;
+    color: rgb(235, 235, 235);
+    background-color: rgb(138, 168, 192);
+    border-radius: 0;  
+    padding: 3px;
+    padding: 20px;
+}
+
+.landingexitstyle:hover {
+    cursor: pointer;
+    background-color: rgb(129, 159, 184);
+    color: rgb(250, 250, 250);
+}
+
+.footerstyleenter:hover {
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+
+
+
+/* //////////// STYLE - DEFAULT (MOBILE) //////////*/
+
+.grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-areas: 
+    "logocontainer"
+    "powerballcontainer"
+    "megamillionscontainer"
+    "footercontainer"
+    ;
+}
+
+.logocontainer {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-areas: 
+    "logo"
+    ;   
+    padding-bottom: 20px;  
+    padding-top: 15px; 
+    background-color: rgb(245, 245, 245);
+    list-style-type: none;
+}
+        .logo {
+            grid-area: logo;           
+            margin-left: auto;
+            margin-right: auto;
+            width: 79px;
+            height: 76px;
+            background-image: url(http://i67.tinypic.com/kos3p.png)
+        }
+
+
+.powerballcontainer {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-areas: 
+    "powerballname"
+    "powerballnumbers"
+    "powerballnextdrawing"
+    "powerballhistory"
+    ;  
+    width: 80%;
+    padding-bottom: 20px;
+    grid-gap: 1px; 
+    column-gap: 1px;
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 350px;
+    min-height: 225px;
+    color: white;
+    font-size: 16px;  
+}
+
+        .powerballname  {
+            grid-area: powerballname;
+            background-color: rgb(238, 145, 148);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+        }
+        .powerballnumbers {
+            grid-area: powerballnumbers;
+            background-color: rgb(250, 157, 160);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;     
+        }
+        .powerballnextdrawing {
+            grid-area: powerballnextdrawing;
+            background-color: rgb(250, 157, 160);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 15px; 
+        }
+        .powerballhistory {
+            grid-area: powerballhistory;
+            background-color: rgb(250, 157, 160);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 17px; 
+        }
+
+.megamillionscontainer {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-areas: 
+    "megamillionsname"
+    "megamillionsnumbers"
+    "megamillionsnextdrawing"
+    "megamillionshistory"
+    ;    
+    width: 80%;
+    padding-bottom: 20px;
+    grid-gap: 1px; 
+    column-gap: 1px;
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 350px;
+    min-height: 225px;
+    max-height: 250px;
+    color: white;
+    font-size: 16px;
+
+}
+        .megamillionsname {
+            grid-area: megamillionsname;
+            background-color: rgb(230, 182, 106);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+        }
+        .megamillionsnumbers {
+            grid-area: megamillionsnumbers;
+            background-color: rgb(243, 188, 100);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+        .megamillionsnextdrawing {
+            grid-area: megamillionsnextdrawing;
+            background-color: rgb(243, 188, 100);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 15px; 
+        }
+        .megamillionshistory {
+            grid-area: megamillionshistory;
+            background-color: rgb(243, 188, 100);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 17px; 
+        }
+
+.powerballhistorysection {
+    background-color: rgb(155, 167, 179);
+    position: absolute;
+    margin-left: auto;
+    margin-right: auto;
+    top: 10%;
+    left: 0;
+    right: 0;
+    bottom: auto;
+    width: 80%;
+    height: auto;
+    text-align: center;
+    color: white;
+    min-width: 250px;
+    border: 15px solid rgb(155, 167, 179);
+    outline: 1px solid rgb(245, 245, 245);
+    outline-offset: -6px;
+}
+
+.powerballhistorysection .powerballnumbers {
+    background-color: rgb(155, 167, 179);
+}
+
+.megamillionshistorysection .megamillionsnumbers {
+    background-color: rgb(155, 167, 179);
+}
+
+.megamillionshistorysection {
+    background-color: rgb(155, 167, 179);
+    position: absolute;
+    margin-left: auto;
+    margin-right: auto;
+    top: 8%;
+    left: 0;
+    right: 0;
+    bottom: auto;
+    width: 80%;
+    height: auto;
+    text-align: center;
+    color: rgb(255, 255, 255);
+    min-width: 250px;
+    border: 15px solid rgb(155, 167, 179);
+    outline: 1px solid rgb(245, 245, 245);
+    outline-offset: -6px;
+}
+
+.footercontainer {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-areas: 
+    "footer"
+    ;   
+    padding-bottom: 20px;  
+    padding-top: 50px; 
+    background-color: rgb(245, 245, 245);
+    font-size: 12px;
+}
+        .footerstyle {
+            grid-area: footer;           
+            margin-left: auto;
+            margin-right: auto;
+            color: rgb(192, 192, 192);
+        }
+
+/* landing page for the app*/
+.landingwindow {
+    background-color: rgb(245, 245, 245);
+    position: absolute;
+    margin-left: auto;
+    margin-right: auto;
+    top: 110px;
+    left: 0;
+    right: 0;
+    width: 90%;    
+    min-height: 80%;
+    text-align: center;
+    color: rgb(29, 28, 28);
+    min-width: 250px;
+    font-size: 20px;
+}
+
+.landingwindow * {
+    margin-bottom: 4ex;
+}
+
+.landingwindow p:nth-child(even) {
+    font-size: larger;
+    font-weight: bold;
+    margin-bottom: 1ex;
+}
+
+.landingwindow p:nth-child(odd) {
+    font-size: 15px;
+}
+
+
+.landinginfo {
+    position: absolute;
+    margin-left: auto;
+    margin-right: auto;
+    top: 80px;
+    left: 0;
+    right: 0;
+    width: 90%;   
+    max-width: 300px;
+    text-align: center;
+    color: rgb(37, 38, 39);
+    min-width: 200px;
+    font-size: 16px;
+}
+
+
+
+
+
+
+@media only screen and (min-width: 640px)  {
+    
+    .grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        grid-template-areas: 
+        "logocontainer logocontainer"
+        "powerballcontainer megaballcontainer"
+        "powerballcontainer megaballcontainer"
+        "footercontainer footercontainer"
+        ;
+    }
+
+    .megamillionshistorysection {
+        top: 15%;
+        width: 35%;
+        min-width: 600px;
+     }
+
+     .powerballhistorysection {
+        top: 15%;
+        width: 35%;
+        min-width: 600px;
+    }
+
+    .logocontainer {
+        grid-area: logocontainer;
+        padding-top: 60px; 
+        padding-bottom: 50px;
+    }    
+   
+    .powerballcontainer { 
+        margin-right: 20px;
+        max-width: 450px;
+        min-height: 325px;
+        max-height: 250px;
+    }   
+    
+    .megamillionscontainer {
+        margin-left: 20px;
+        max-width: 450px;
+        min-height: 325px;
+        max-height: 250px;
+    }
+
+    .numberslist li {
+        border-radius: 50%;  
+        height: 1.7em;
+        width: 1.8em;
+        padding: 5px;
+    }
+
+    .footercontainer {
+        grid-area: footercontainer;
+    }
+
+    .landingwindow {
+        top: 180px;
+        font-size: 28px;
+    }
+
+    .landinginfo {
+        max-width: 450px;
+        font-size: 17px;
+    }
+
+}
+
