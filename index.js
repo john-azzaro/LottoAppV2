@@ -7,26 +7,41 @@ const MEGAMILLIONS = "MegaMillions";
 
 const STORE = {
     drawings: [],
-    
+
+}
+
+function findMostCommonNumber(drawings) {
+    let mostCommonNumber = null;
+    const numbers = drawings.map((drawing) => {
+        const numbersNoMulti = drawing.numbers.slice(drawing.numbers.length - 1)
+        return {
+            specialNumber: numbersNoMulti.pop(),
+            regularNumbers: numbersNoMulti
+        }
+    });
+    return mostCommonNumber;
 }
 
 //// API functions //////////////////////////////////////////////////////////////////////////////////////////////////
 //// NOTES: The ... put the contents of one array into another array (instead of putting the array itself in the other array)
 //// or said another way, the array spread operator - instead of pushing the whole array inside, it pushes all the array items in at once
 
-function getLotteryDataFromApi() {
-    getPowerballDataFromApi(function(response) {
+function getLotteryDataFromApi(entireHistory) {
+    getPowerballDataFromApi(function (response) {
         const powerBallDrawings = powerBallAdapter(response.data);
-        STORE.drawings.push(...powerBallDrawings.slice(powerBallDrawings.length - 8));                      
-        
-        getMegaMillionsDataFromApi(function(response) {
-        const megaMillionsDrawings = megaMillionsAdapter(response.data)
-        STORE.drawings.push(...megaMillionsDrawings.slice(megaMillionsDrawings.length - 8));    
-        
-        displayMainPage(STORE.drawings, STORE.newsItems);
+        const drawings = entireHistory ? powerBallDrawings : powerBallDrawings.slice(powerBallDrawings.length - 8);
+        STORE.drawings.push(...drawings);
+
+        getMegaMillionsDataFromApi(function (response) {
+            const megaMillionsDrawings = megaMillionsAdapter(response.data);
+            const drawings = entireHistory ? megaMillionsDrawings : megaMillionsDrawings.slice(megaMillionsDrawings.length - 8);
+            STORE.drawings.push(...drawings);
+
+            displayMainPage(STORE.drawings, STORE.newsItems);
         });
     });
 }
+
 
 function getPowerballDataFromApi(success, error) {
     getDataFromApi(POWERBALL_URL, success, error);
@@ -38,7 +53,7 @@ function getMegaMillionsDataFromApi(success, error) {
 
 function getDataFromApi(url, success, error) {
     const settings = {
-        url, 
+        url,
         type: 'GET',
         dataType: 'json',
         success,
@@ -50,11 +65,11 @@ function getDataFromApi(url, success, error) {
 function splitDrawingsByName(drawings) {
     let splitDrawings = {};
     for (let i = 0; i < drawings.length; i++) {
-      if (drawings[i].name in splitDrawings) {
-        splitDrawings[drawings[i].name].push(drawings[i]);
-      } else {
-        splitDrawings[drawings[i].name] = [drawings[i]];
-      }
+        if (drawings[i].name in splitDrawings) {
+            splitDrawings[drawings[i].name].push(drawings[i]);
+        } else {
+            splitDrawings[drawings[i].name] = [drawings[i]];
+        }
     }
     return splitDrawings;
 }
@@ -68,7 +83,7 @@ function megaMillionsAdapter(drawings) {
         const megaBallMultiplier = [drawing[megaBallIndex], drawing[multiplierIndex]];
         const numbers = drawing[numbersIndex].split(" ")
         numbers.push(...megaBallMultiplier)
-            return {
+        return {
             name: MEGAMILLIONS,
             date: new Date(drawing[dateIndex]),
             numbers
@@ -84,9 +99,9 @@ function powerBallAdapter(drawings) {
         const numbers = drawing[numbersIndex].split(" ")
         numbers.push(drawing[multiplierIndex])
         return {
-                name: POWERBALL,
-                date: new Date(drawing[dateIndex]),   // makes a new date out of the date string format
-                numbers
+            name: POWERBALL,
+            date: new Date(drawing[dateIndex]),   // makes a new date out of the date string format
+            numbers
         }
     });
 }
@@ -110,7 +125,7 @@ function findNextDrawing(drawingName, date) {
             else if (lastDay === 3) {
                 nextDay = 6;
             }
-            break;   
+            break;
         case MEGAMILLIONS:
             if (lastDay === 5) {
                 nextDay = 2;
@@ -119,11 +134,11 @@ function findNextDrawing(drawingName, date) {
                 nextDay = 5;
             }
             break;
-            default: 
-        return today;
+        default:
+            return today;
     }
-    while(date.getDay() !== nextDay ) {
-       console.log( new Date(date.setDate(date.getDate() + 1)));
+    while (date.getDay() !== nextDay) {
+        console.log(new Date(date.setDate(date.getDate() + 1)));
     }
     return date;
 }
@@ -149,8 +164,8 @@ function generateHistoryItem(drawing) {
     const options = {
         weekday: "long",
         year: "numeric",
-        month: "long", 
-        day: "numeric",  
+        month: "long",
+        day: "numeric",
     }
     return `
     <li class="historyitemstyle">
@@ -284,37 +299,37 @@ function displayNumberSection(drawings, container, append = true) {
 /////// EVENT HANDLERS //////////////////////////////////////
 
 function handleEnterLandingPage() {
-    $('main').on('click', '#landingenter', function(event) {
+    $('main').on('click', '#landingenter', function (event) {
         $('.landingwindow').removeClass('hidden');
     });
 }
 
 function handleExitLandingPage() {
-    $('main').on('click', '#landingexit', function(event) {
+    $('main').on('click', '#landingexit', function (event) {
         $('.landingwindow').addClass('hidden');
     });
 }
 
 function handleReturnFromPowerballHistory() {
-    $('main').on('click', '#historyexit', function(event) {
+    $('main').on('click', '#historyexit', function (event) {
         $('.powerballhistorysection').addClass('hidden');
     });
 }
 
 function handleReturnFromMegaMillionsHistory() {
-    $('main').on('click', '#historyexit', function(event) {
+    $('main').on('click', '#historyexit', function (event) {
         $('.megamillionshistorysection').addClass('hidden');
     });
 }
 
 function handleMegaMillionsHistory() {
-    $('main').on('click', '#megamillionshistorylink', function(event) {
+    $('main').on('click', '#megamillionshistorylink', function (event) {
         $('.megamillionshistorysection').removeClass('hidden');
     });
 }
 
 function handlePowerBallHistory() {
-    $('main').on('click','#powerballhistorylink', function(event) {
+    $('main').on('click', '#powerballhistorylink', function (event) {
         $('.powerballhistorysection').removeClass('hidden');
     });
 }
