@@ -5,10 +5,13 @@ const MEGAMILLIONS_URL = 'https://data.ny.gov/api/views/5xaw-6ayf/rows.json';
 const POWERBALL = "Powerball";
 const MEGAMILLIONS = "MegaMillions";
 
+// this becomes an array of objects with all of the stuff the adpater returns.
 const STORE = {
     drawings: [],
 
 }
+
+///// Filters //////////////////////////////////////////////////////////////////////////////////////////////////////
 
 function findMostCommonNumber(drawings) {
     let mostCommonNumber = null;
@@ -23,13 +26,18 @@ function findMostCommonNumber(drawings) {
 }
 
 //// API functions //////////////////////////////////////////////////////////////////////////////////////////////////
-//// NOTES: The ... put the contents of one array into another array (instead of putting the array itself in the other array)
-//// or said another way, the array spread operator - instead of pushing the whole array inside, it pushes all the array items in at once
+// adapter means taker this and make something else.
 
+// this function collects the data from each API 
 function getLotteryDataFromApi(entireHistory) {
+    // the function in the call signature is an anonymous function, the response is the datat that would come from the api
+    // we need one set of data before the other, so powerball comes megamillions
     getPowerballDataFromApi(function (response) {
+        // go to powerball adapater (response.data is the raw json data)
         const powerBallDrawings = powerBallAdapter(response.data);
+        // our drawing are equal to entire history, if entire history is true then drawing eqauls all the powerball drawings. else, it equals the last 8.
         const drawings = entireHistory ? powerBallDrawings : powerBallDrawings.slice(powerBallDrawings.length - 8);
+        // then store the data.
         STORE.drawings.push(...drawings);
 
         getMegaMillionsDataFromApi(function (response) {
@@ -37,7 +45,8 @@ function getLotteryDataFromApi(entireHistory) {
             const drawings = entireHistory ? megaMillionsDrawings : megaMillionsDrawings.slice(megaMillionsDrawings.length - 8);
             STORE.drawings.push(...drawings);
 
-            displayMainPage(STORE.drawings, STORE.newsItems);
+            // this passes all the data that we have gone through this point to the main page.  this time we are passing store.draiwings to the main page
+            displayMainPage(STORE.drawings);
         });
     });
 }
@@ -74,15 +83,30 @@ function splitDrawingsByName(drawings) {
     return splitDrawings;
 }
 
+// the adapter formalizes and standadizes the data.  the datat comes in different, but you need to make it into something the app can use.
+// adpater will have a map in it if you have a list and need to turn it into another list things.
+// more than one api, you dont need an adapter.
+// if there apis are differnt, traffic and map, you dont need an adapter.
+// an adapter is a mashup
 function megaMillionsAdapter(drawings) {
+    // these wont change inside the loop, this is configuration.  this is the blueprint.  i adapted it into something i can translate.
     const dateIndex = 8;
     const numbersIndex = 9;
     const megaBallIndex = 10;
     const multiplierIndex = 11;
+    // this map is a for loop.  map is taking a for loop, and then pushing result of each loop result iteration into the array and then return the array at the end.
+    // everything int he curly brace is what happens in the for loop, the contents of the loop.
     return drawings.map((drawing) => {
+        // these variables would be inside the loop because otherwsie they would.
+        // the variables above could be inside the loop, but it would be bulky. 
+        
+        // here we make new arrays for special balls in the drawing.
         const megaBallMultiplier = [drawing[megaBallIndex], drawing[multiplierIndex]];
+        // in the json raw data, this is a string of numbers speerated by spaces.  here we split them into an array of actual numbers
         const numbers = drawing[numbersIndex].split(" ")
+        // you push megaballmultiplier, the ... (i.e.array spread operator) pushes the multiplier to the end of the array.  megaballmultiplier is an array of two numbers.
         numbers.push(...megaBallMultiplier)
+        // taking all the data, creating a new object with megamillions data and the date.
         return {
             name: MEGAMILLIONS,
             date: new Date(drawing[dateIndex]),
@@ -106,10 +130,8 @@ function powerBallAdapter(drawings) {
     });
 }
 
-////////////// countdown ///////////////
-// switch is a way to have a whole bunch of if-else.
-// switch would be used when you have one criterion with multi values and you want to do a different option based on different values.
-// switch saves you a chain of else ifs ()but only if you are going through one single of criterion)
+////////////// countdown ///////////////////////////////////////////////////////////////////////////////////////////
+
 function findNextDrawing(drawingName, date) {
     const today = new Date();
     if (date.getDay() === today.getDay()) {
@@ -296,7 +318,7 @@ function displayNumberSection(drawings, container, append = true) {
     });
 }
 
-/////// EVENT HANDLERS //////////////////////////////////////
+/////// EVENT HANDLERS ///////////////////////////////////////////////////////////////////////////////////
 
 function handleEnterLandingPage() {
     $('main').on('click', '#landingenter', function (event) {
@@ -345,10 +367,11 @@ function setUpEventHandlers() {
     handlePowerBallHistory();
 }
 
-
+// the function that starts the app
 function initalize() {
     setUpEventHandlers();
     getLotteryDataFromApi();
 }
 
+// initial callback to start the app (entry point -- because it starts everything)
 $(initalize);
