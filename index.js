@@ -30,8 +30,8 @@ function findMostCommonNumber(drawings) {
 
 // this function collects the data from each API 
 function getLotteryDataFromApi(entireHistory) {
-    // the function in the call signature is an anonymous function, the response is the datat that would come from the api
-    // we need one set of data before the other, so powerball comes megamillions
+        // the function in the call signature is an anonymous function, the response is the datat that would come from the api
+        // we need one set of data before the other, so powerball comes megamillions
     getPowerballDataFromApi(function (response) {
         // go to powerball adapater (response.data is the raw json data)
         const powerBallDrawings = powerBallAdapter(response.data);
