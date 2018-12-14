@@ -45,21 +45,23 @@ function getLotteryDataFromApi(entireHistory) {
             const drawings = entireHistory ? megaMillionsDrawings : megaMillionsDrawings.slice(megaMillionsDrawings.length - 8);
             STORE.drawings.push(...drawings);
 
-            // this passes all the data that we have gone through this point to the main page.  this time we are passing store.draiwings to the main page
+            // this passes all the data that we have gone through this point to the main page.  this time we are passing STORE.drawings to the main page
             displayMainPage(STORE.drawings);
         });
     });
 }
 
-
+// gets powerball data (i.e. POWERBALL_URL), as well as success and error.
 function getPowerballDataFromApi(success, error) {
     getDataFromApi(POWERBALL_URL, success, error);
 }
 
+// gets megamillions data (i.e. MEGAMILLIONS_URL), as well as success and error.
 function getMegaMillionsDataFromApi(success, error) {
     getDataFromApi(MEGAMILLIONS_URL, success, error);
 }
 
+// retrieve data from API's (applies to both megamillions and powerball)
 function getDataFromApi(url, success, error) {
     const settings = {
         url,
@@ -69,18 +71,6 @@ function getDataFromApi(url, success, error) {
         error,
     }
     $.ajax(settings);
-}
-
-function splitDrawingsByName(drawings) {
-    let splitDrawings = {};
-    for (let i = 0; i < drawings.length; i++) {
-        if (drawings[i].name in splitDrawings) {
-            splitDrawings[drawings[i].name].push(drawings[i]);
-        } else {
-            splitDrawings[drawings[i].name] = [drawings[i]];
-        }
-    }
-    return splitDrawings;
 }
 
 // the adapter formalizes and standadizes the data.  the datat comes in different, but you need to make it into something the app can use.
@@ -129,6 +119,8 @@ function powerBallAdapter(drawings) {
         }
     });
 }
+
+
 
 ////////////// countdown ///////////////////////////////////////////////////////////////////////////////////////////
 
@@ -255,6 +247,8 @@ function generateCountDown(drawingName, drawingDate) {
     `
 }
 
+///// Intro page ///////////////////////////////////////////////////////////////////////////////////
+
 function generateFooterSection() {
     return `
     <footer role="contentinfo" class="footercontainer">
@@ -280,6 +274,51 @@ function generateFooterSection() {
 
 ///// DISPLAY FUNCTIONS /////////////////////////////////////////////////////////////////////////////////////////////
 
+// Takes the data (from getLotteryDataFromApi), we display the data on the page.
+// The current layout has three sections, a logo section, a numbers section, and the footer.
+// note: the "main" slot is basically to display the information
+function displayMainPage(drawings) {
+    const main = $('main')
+    // this empties it out so that we can do a bunch of appends
+    main.empty();                                        
+    displayLogo(main);
+    displayNumberSection(drawings, main);                 
+    displayFooter(main);
+}
+
+
+// appends the logo section
+function displayLogo(container) {
+    $(container).append(generateLogoSection());
+}
+
+// splits the drawings into two different containers?
+function displayNumberSection(drawings, container, append = true) {
+    const splitDrawings = splitDrawingsByName(drawings);
+    Object.keys(splitDrawings).forEach(splitDrawing => {
+        appendOrReplace(splitDrawings[splitDrawing].reverse(), container, generateNumberSection, append);
+    });
+}
+
+// append the display section
+function displayFooter(container) {
+    $(container).append(generateFooterSection());
+}
+
+
+// splits drawings
+function splitDrawingsByName(drawings) {
+    let splitDrawings = {};
+    for (let i = 0; i < drawings.length; i++) {
+        if (drawings[i].name in splitDrawings) {
+            splitDrawings[drawings[i].name].push(drawings[i]);
+        } else {
+            splitDrawings[drawings[i].name] = [drawings[i]];
+        }
+    }
+    return splitDrawings;
+}
+
 // reuseable - takes a buch of items, runs the generator on the item, and if true adds to the container, if false replaces the contents of container.
 function appendOrReplace(items, container, generator, append = true) {
     const html = generator(items);
@@ -290,33 +329,18 @@ function appendOrReplace(items, container, generator, append = true) {
     }
 }
 
-function displayLogo(container) {
-    $(container).append(generateLogoSection());
-}
 
-function displayFooter(container) {
-    $(container).append(generateFooterSection());
-}
 
-// takes the data and displays on page
-function displayMainPage(drawings) {
-    const main = $('main')
-    main.empty();                                         // this empties it out so that we can do a bunch of appends
-    displayLogo(main);
-    displayNumberSection(drawings, main);                 // so the "main" slot is basically to display the information
-    displayFooter(main);
-}
 
-function displayNumbersList(numbers, container) {
-    container.html(generateNumbersList(numbers));
-}
 
-function displayNumberSection(drawings, container, append = true) {
-    const splitDrawings = splitDrawingsByName(drawings);
-    Object.keys(splitDrawings).forEach(splitDrawing => {
-        appendOrReplace(splitDrawings[splitDrawing].reverse(), container, generateNumberSection, append);
-    });
-}
+
+
+////////////////
+// Obsolete? ///
+////////////////
+// function displayNumbersList(numbers, container) {
+//     container.html(generateNumbersList(numbers));
+// }
 
 /////// EVENT HANDLERS ///////////////////////////////////////////////////////////////////////////////////
 
